@@ -27,4 +27,25 @@ app.post('/send-email', async (req, res) => {
     });
 
     // Email content
-    const mailOptions =
+    const mailOptions = {
+        from: process.env.EMAIL_USER, // Sender's email address
+        to: process.env.EMAIL_TO, // Recipient's email address
+        subject: `New Inquiry from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nService: ${service}\nMessage: ${message}`,
+    };
+
+    try {
+        // Send the email
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
+        res.status(200).json({ message: 'Email sent successfully!' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Failed to send email.', error: error.message });
+    }
+});
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
