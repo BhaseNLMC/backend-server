@@ -41,8 +41,4 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000; // Use the environment-provided PORT or default to 3000
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running at http://0.0.0.0:${PORT}`);
-});
+>>>>>>> 0f93b79860ddd6222bd2930ab7c9f785a4a6c396
