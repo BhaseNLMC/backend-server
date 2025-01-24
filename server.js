@@ -5,40 +5,26 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Allow cross-origin requests
 app.use(bodyParser.json());
 
+// POST route to handle form submission
 app.post('/send-email', async (req, res) => {
     const { name, email, service, message } = req.body;
 
+    // Configure the email transporter
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
+        port: 465, // SSL
         secure: true,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
+            user: process.env.EMAIL_USER, // Your Gmail address
+            pass: process.env.EMAIL_PASS, // Your Gmail app password
         },
     });
 
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_TO,
-        subject: `New Inquiry from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nService: ${service}\nMessage: ${message}`,
-    };
-
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent:', info.response);
-        res.status(200).json({ message: 'Email sent successfully!' });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send email.', error: error.message });
-    }
-});
-
->>>>>>> 0f93b79860ddd6222bd2930ab7c9f785a4a6c396
+    // Email content
+    const mailOptions =
